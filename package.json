@@ -1,0 +1,29 @@
+{
+  "name": "kanban-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node_modules/.bin/webpack-dev-server --progress"
+  },
+  "author": "huy.quang.ngo",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-react": "^6.24.1",
+    "webpack": "^4.14.0",
+    "webpack-cli": "^3.0.8",
+    "webpack-dev-server": "^3.1.4"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "marked": "^0.4.0",
+    "prop-types": "^15.6.2",
+    "react": "^16.4.1",
+    "react-addons-update": "^15.6.2",
+    "react-dom": "^16.4.1",
+    "whatwg-fetch": "^2.0.4"
+  }
+}
