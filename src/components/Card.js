@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import CheckList from './CheckList';
 import marked from 'marked';
 import PropTypes from 'prop-types';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 let titlePropType = (props, propName, componentName) => {
     if (props[propName]) {
@@ -56,7 +57,11 @@ class Card extends Component {
                     onClick={this.toggleDetails.bind(this)}>
                     {this.props.title}
                 </div>
-                {cardDetails}
+                <ReactCSSTransitionGroup transitionName="toggle"
+                                         transitionEnterTimeout={250}
+                                         transitionLeaveTimeout={250} >
+                    {cardDetails}
+                </ReactCSSTransitionGroup>
             </div>
         );
     }
