@@ -18,8 +18,13 @@ let titlePropType = (props, propName, componentName) => {
 const cardDragSpec = {
     beginDrag(props) {
         return {
-            id: props.id
+            id: props.id,
+            status: props.status,
+            color: props.color
         };
+    },
+    endDrag(props) {
+        props.cardCallbacks.persistCardDrag(props.id, props.status, props.color);
     }
 }
 
