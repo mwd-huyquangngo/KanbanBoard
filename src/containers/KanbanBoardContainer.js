@@ -171,6 +171,72 @@ class KanbanBoardContainer extends Component {
         });
     }
 
+    //listId is status of list: todo, in-progress, done
+    updateCardStatus(cardId, listId) {
+        //find the index of the card
+        let cardIndex = this.state.cards.findIndex((card) => card.id === cardId);
+
+        //get the current card
+        let card = this.state.cards[cardIndex];
+
+        if (card) {
+            //only process if hovering over a different list
+            if (card.status !== listId) {
+                //set the component state to the mutated object
+                this.setState(update(this.state, {
+                    cards: {
+                        [cardIndex]: {
+                            status: {$set: listId},
+                            color: {$set: this.getCardColor(listId)}
+                        }
+                    }
+                }));
+            }
+        }
+    }
+
+    getCardColor(listId) {
+        let color;
+
+        switch (listId) {
+            case 'todo':
+                color = '#3A7E28';
+                break;
+            case 'in-progress':
+                color = '#BD8D31';
+                break;
+            case 'done':
+                color = '#EE102D';
+                break;
+        }
+
+        return color;
+    }
+
+    updateCardPosition(cardId, afterId) {
+        //only process if hovering over a different card
+        if (cardId !== afterId) {
+            //find the index of the card
+            let cardIndex = this.state.cards.findIndex((card) => card.id === cardId);
+
+            //get the current card
+            let card = this.state.cards[cardIndex];
+
+            //find the index of card that user is hovering over
+            let afterIndex = this.state.cards.findIndex((card) => card.id==afterId);
+
+            //use splice to remove card and reinsert it in a new index
+            this.setState(update(this.state, {
+                cards: {
+                    $splice: [
+                        [cardIndex, 1],
+                        [afterIndex, 0, card]
+                    ]
+                }
+            }));
+        }
+    }
+
     render() {
         return(
             <KanbanBoard cards={this.state.cards} 
@@ -179,6 +245,12 @@ class KanbanBoardContainer extends Component {
                             toggle: this.toggleTask.bind(this),
                             delete: this.deleteTask.bind(this),
                             add: this.addTask.bind(this)
+                        }
+                    }
+                    cardCallbacks={
+                        {
+                            updateStatus: this.updateCardStatus.bind(this),
+                            updatePosition: this.updateCardPosition.bind(this)
                         }
                     }        
             />
