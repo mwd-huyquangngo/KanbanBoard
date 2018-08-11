@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import KanbanBoard from '../components/KanbanBoard';
 import 'whatwg-fetch';
 import update from 'react-addons-update';
+import { throttle } from '../utils/utils';
 
 const API_URL = 'http://kanbanapi.pro-react.com';
 
@@ -16,6 +17,11 @@ class KanbanBoardContainer extends Component {
         this.state = {
             cards: [],
         };
+        //only call updateCardsStatus when arguments change
+        this.updateCardStatus = throttle(this.updateCardStatus.bind(this));
+
+        //call updateCardsPosition at max every 500ms (or when argument change)
+        this.updateCardPosition = throttle(this.updateCardPosition.bind(this), 500);
     }
 
     componentDidMount() {
@@ -249,8 +255,8 @@ class KanbanBoardContainer extends Component {
                     }
                     cardCallbacks={
                         {
-                            updateStatus: this.updateCardStatus.bind(this),
-                            updatePosition: this.updateCardPosition.bind(this)
+                            updateStatus: this.updateCardStatus,
+                            updatePosition: this.updateCardPosition
                         }
                     }        
             />
