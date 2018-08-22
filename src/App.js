@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import KanbanBoardContainer from './containers/KanbanBoardContainer';
+import { HashRouter } from "react-router-dom";
 
 /*
 let cardsList = [
@@ -47,4 +48,10 @@ let cardsList = [
 ];
 */
 
-ReactDOM.render(<KanbanBoardContainer />, document.getElementById('root'));
+//ReactDOM.render(<KanbanBoardContainer/>, document.getElementById('root'));
+
+ReactDOM.render((
+    <HashRouter>    
+        <KanbanBoardContainer/>
+    </HashRouter>
+), document.getElementById('root'));
