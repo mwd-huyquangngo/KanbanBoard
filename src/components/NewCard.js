@@ -20,7 +20,7 @@ class NewCard extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        this.props.cardCallbacks.addCard(this.state);
+        this.props.cardActions.addCard(this.state);
         this.props.history.push('/');
     }
 
@@ -40,7 +40,7 @@ class NewCard extends Component {
 }
 
 NewCard.propTypes = {
-    cardCallbacks: PropTypes.object,
+    cardActions: PropTypes.object,
 };
 
 export default NewCard;

@@ -25,14 +25,18 @@ const cardDragSpec = {
         };
     },
     endDrag(props) {
-        props.cardCallbacks.persistCardDrag(props.id, props.status, props.color);
+        let currentCardIndex = props.cards.findIndex((card) => card.id === props.id);
+        let changedCard = props.cards.find((card) => card.id === props.id);
+        props.cardActions.persistCardDrag(changedCard, props, currentCardIndex);
     }
 }
 
 const cardDropSpec = {
     hover(props, monitor) {
         const draggedId = monitor.getItem().id;
-        props.cardCallbacks.updatePosition(draggedId, props.id)
+        if(draggedId !== props.id) {
+            props.cardActions.updateCardPosition(draggedId, props.id);
+        }
     }
 }
 
@@ -109,13 +113,14 @@ class Card extends Component {
 }
 
 Card.propTypes = {
+    cards: PropTypes.arrayOf(PropTypes.object),
     id: PropTypes.number,
     title: titlePropType,
     description: PropTypes.string,
     color: PropTypes.string,
     tasks: PropTypes.arrayOf(PropTypes.object),
     taskCallbacks: PropTypes.object,
-    cardCallbacks: PropTypes.object,
+    cardActions: PropTypes.object,
     connectDragSource: PropTypes.func.isRequired,
     connectDropTarget: PropTypes.func.isRequired
 };

@@ -14,7 +14,7 @@ class EditCard extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        this.props.cardCallbacks.updateCard(this.state);
+        this.props.cardActions.updateCard(this.state);
         this.props.history.push('/');
     }
 
@@ -35,7 +35,7 @@ class EditCard extends Component {
 
 EditCard.propTypes = {
     cards: PropTypes.arrayOf(PropTypes.object),
-    cardCallbacks: PropTypes.object,
+    cardActions: PropTypes.object,
 };
 
 export default EditCard;

@@ -7,7 +7,7 @@ import constants from '../constants/constants';
 const listTargetSpec = {
     hover(props, monitor) {
         const draggedId = monitor.getItem().id;
-        props.cardCallbacks.updateStatus(draggedId, props.id)
+        props.cardActions.updateCardStatus(draggedId, props.id)
     }
 }
 
@@ -21,12 +21,13 @@ class ListCard extends Component {
     render() {
         const { connectDropTarget } = this.props;
 
-        let cards = this.props.cards.map((card) => {
+        let filterCards = this.props.filterCards.map((card) => {
             return (
                 <Card key={card.id}
                     taskCallbacks={this.props.taskCallbacks}
-                    cardCallbacks={this.props.cardCallbacks}
-                    {...card}      
+                    cardActions={this.props.cardActions}
+                    cards={this.props.cards}
+                    {...card}
                 />
             );
         });
@@ -34,7 +35,7 @@ class ListCard extends Component {
         return connectDropTarget(
             <div className="list-card">
                 <h1>{this.props.title}</h1>
-                {cards}
+                {filterCards}
             </div>
         );
     }
@@ -43,8 +44,9 @@ class ListCard extends Component {
 ListCard.propTypes = {
     title: PropTypes.string.isRequired,
     cards: PropTypes.arrayOf(PropTypes.object),
+    filterCards: PropTypes.arrayOf(PropTypes.object),
     taskCallbacks: PropTypes.object,
-    cardCallbacks: PropTypes.object,
+    cardActions: PropTypes.object,
     connectDropTarget: PropTypes.func.isRequired
 };
 

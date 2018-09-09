@@ -18,27 +18,30 @@ class KanbanBoard extends Component {
             <div className="app">
                 <Link to='/new' className="float-button">+</Link>
                 <ListCard id='todo' title='To Do' 
-                    cards={this.props.cards.filter((card) => {return card.status === "todo"})} 
+                    filterCards={this.props.cards.filter((card) => {return card.status === "todo"})}
                     taskCallbacks={this.props.taskCallbacks}
-                    cardCallbacks={this.props.cardCallbacks}
+                    cardActions={this.props.cardActions}
+                    cards={this.props.cards}
                 />
                 <ListCard id='in-progress' title='In Progress' 
-                    cards={this.props.cards.filter((card) => {return card.status === "in-progress"})}
+                    filterCards={this.props.cards.filter((card) => {return card.status === "in-progress"})}
                     taskCallbacks={this.props.taskCallbacks}
-                    cardCallbacks={this.props.cardCallbacks}
+                    cardActions={this.props.cardActions}
+                    cards={this.props.cards}
                 />
                 <ListCard id='done' title='Done' 
-                    cards={this.props.cards.filter((card) => {return card.status === "done"})}
+                    filterCards={this.props.cards.filter((card) => {return card.status === "done"})}
                     taskCallbacks={this.props.taskCallbacks}
-                    cardCallbacks={this.props.cardCallbacks}
+                    cardActions={this.props.cardActions}
+                    cards={this.props.cards}
                 />
                 {/* {cardModal} */}
                 <Switch>
                     <Route path='/new' render={(props) => (
-                        <NewCard {...props} cardCallbacks={this.props.cardCallbacks} />
+                        <NewCard {...props} cardActions={this.props.cardActions} />
                     )} />
                     <Route path='/edit/:card_id' render={(props) => (
-                        <EditCard {...props} cards={this.props.cards} cardCallbacks={this.props.cardCallbacks} />
+                        <EditCard {...props} cards={this.props.cards} cardActions={this.props.cardActions} />
                     )} />
                 </Switch>
             </div>
@@ -48,8 +51,8 @@ class KanbanBoard extends Component {
 
 KanbanBoard.propTypes = {
     cards: PropTypes.arrayOf(PropTypes.object),
+    filterCards: PropTypes.arrayOf(PropTypes.object),
     taskCallbacks: PropTypes.object,
-    cardCallbacks: PropTypes.object
 };
 
 export default DragDropContext(HTML5Backend)(KanbanBoard);

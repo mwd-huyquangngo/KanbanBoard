@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import KanbanBoardContainer from './containers/KanbanBoardContainer';
 import { HashRouter } from "react-router-dom";
-
+import { Provider } from 'react-redux';
+import CardStore from './store/CardStore';
 /*
 let cardsList = [
     {
@@ -51,7 +52,9 @@ let cardsList = [
 //ReactDOM.render(<KanbanBoardContainer/>, document.getElementById('root'));
 
 ReactDOM.render((
-    <HashRouter>    
-        <KanbanBoardContainer/>
-    </HashRouter>
+    <Provider store={CardStore}>
+        <HashRouter>
+            <KanbanBoardContainer/>
+        </HashRouter>
+    </Provider>
 ), document.getElementById('root'));

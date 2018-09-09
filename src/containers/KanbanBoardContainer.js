@@ -3,7 +3,10 @@ import KanbanBoard from '../components/KanbanBoard';
 import 'whatwg-fetch';
 import update from 'react-addons-update';
 import { throttle } from '../utils/utils';
-import { Route } from "react-router-dom";
+import { Route, withRouter } from "react-router-dom";
+import CardActionCreators from '../actions/CardActionCreators';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 const API_URL = 'http://kanbanapi.pro-react.com';
 
@@ -15,26 +18,10 @@ const API_HEADERS = {
 class KanbanBoardContainer extends Component {
     constructor() {
         super(...arguments);
-        this.state = {
-            cards: [],
-        };
-        //only call updateCardsStatus when arguments change
-        this.updateCardStatus = throttle(this.updateCardStatus.bind(this));
-
-        //call updateCardsPosition at max every 500ms (or when argument change)
-        this.updateCardPosition = throttle(this.updateCardPosition.bind(this), 500);
     }
 
     componentDidMount() {
-        fetch(API_URL + '/cards', {headers: API_HEADERS})
-            .then((response) => response.json())
-            .then((responseData) => {
-                this.setState({cards: responseData});
-                window.state = this.state;
-            })
-            .catch((error) => {
-                console.log('Error fetching and parsing data', error);
-            });
+        this.props.cardActions.fetchCards();
     }
 
     addTask(cardId, taskName) {
@@ -178,199 +165,28 @@ class KanbanBoardContainer extends Component {
         });
     }
 
-    //listId is status of list: todo, in-progress, done
-    updateCardStatus(cardId, listId) {
-        //find the index of the card
-        let cardIndex = this.state.cards.findIndex((card) => card.id === cardId);
-
-        //get the current card
-        let card = this.state.cards[cardIndex];
-
-        if (card) {
-            //only process if hovering over a different list
-            if (card.status !== listId) {
-                //set the component state to the mutated object
-                this.setState(update(this.state, {
-                    cards: {
-                        [cardIndex]: {
-                            status: {$set: listId},
-                            color: {$set: this.getCardColor(listId)}
-                        }
-                    }
-                }));
-            }
-        }
-    }
-
-    getCardColor(listId) {
-        let color;
-
-        switch (listId) {
-            case 'todo':
-                color = '#3A7E28';
-                break;
-            case 'in-progress':
-                color = '#BD8D31';
-                break;
-            case 'done':
-                color = '#EE102D';
-                break;
-        }
-
-        return color;
-    }
-
-    updateCardPosition(cardId, afterId) {
-        //only process if hovering over a different card
-        if (cardId !== afterId) {
-            //find the index of the card
-            let cardIndex = this.state.cards.findIndex((card) => card.id === cardId);
-
-            //get the current card
-            let card = this.state.cards[cardIndex];
-
-            //find the index of card that user is hovering over
-            let afterIndex = this.state.cards.findIndex((card) => card.id==afterId);
-
-            //use splice to remove card and reinsert it in a new index
-            this.setState(update(this.state, {
-                cards: {
-                    $splice: [
-                        [cardIndex, 1],
-                        [afterIndex, 0, card]
-                    ]
-                }
-            }));
-        }
-    }
-
-    persistCardDrag(cardId, status, color) {
-        //find the index of card
-        let cardIndex = this.state.cards.findIndex((card) => card.id === cardId);
-
-        //get the current card
-        let card = this.state.cards[cardIndex];
-
-        fetch(`${API_URL}/cards/${cardId}`, {
-            method: 'PUT',
-            headers: API_HEADERS,
-            body: JSON.stringify({status: card.status, color: card.color, row_order_position: cardIndex})
-        })
-        .then((response) => {
-            if(!response.ok) {
-                //throw error if server response wasn't ok
-                //so we can revert back the optimistic changes made to the UI
-                throw new Error("Server response wasn't OK");
-            }
-        })
-        .catch((error) => {
-            console.error('Fetch error:', error);
-            this.setState(update(this.state, {
-                card: {
-                    [cardIndex]: {
-                        status: {$set: status},
-                        color: {$set: color}
-                    }
-                }
-            }))
-        })
-    }
-
-    addCard(card) {
-        // Keep a reference to the original state prior to the mutations
-        // in case you need to revert the optimistic changes in the UI
-        let prevState = this.state;
-
-        //add temporary id to the card
-        if(card.id === null) {
-            let card = Object.assign({}, card, {id:Date.now()});
-        }
-
-        //create a new object and push the new card to the array of cards
-        let nextState = update(this.state.cards, {$push: [card]});
-
-        //set the component state to the mutated object
-        this.setState({cards: nextState});
-
-        //call API to add the card on the server
-        fetch(`${API_URL}/cards`, {
-            method: 'POST',
-            headers: API_HEADERS,
-            body: JSON.stringify(card)
-        })
-        .then((response) => {
-            if(response.ok) {
-                return response.json();
-            } else {
-                throw new Error('Server response was not OK');
-            }
-        })
-        .then((responseData) => {
-            card.id = responseData.id;
-            this.setState({cards: nextState});
-        })
-        .catch((error) => {
-            this.setState(prevState);
-        });
-    }
-
-    updateCard(card) {
-        // Keep a reference to the original state prior to the mutations
-        // in case you need to revert the optimistic changes in the UI
-        let prevState = this.state;
-
-        //find the index of the card
-        let cardIndex = this.state.cards.findIndex((c) => c.id === card.id);
-
-        //using $set command we will change the whole card
-        let nextState = update(this.state.cards, {
-            [cardIndex]: {$set: card}
-        });
-
-        //set component state to the mutated object
-        this.setState({cards: nextState});
-
-        //call API to update card
-        fetch(`${API_URL}/cards/${card.id}`, {
-            method: 'PUT',
-            headers: API_HEADERS,
-            body: JSON.stringify(card)
-        })
-        .then((response) => {
-            if(!response.ok) {
-                throw new Error('Server response was not OK');
-            }
-        })
-        .catch((error) => {
-            console.error('Update card error: ', error);
-            this.setState(prevState);
-        });
-    }
-
     render() {
         return(   
             <Route render={() => ( 
-                <KanbanBoard cards={this.state.cards} 
-                        taskCallbacks={
-                            {
-                                toggle: this.toggleTask.bind(this),
-                                delete: this.deleteTask.bind(this),
-                                add: this.addTask.bind(this)
+                <KanbanBoard taskCallbacks={
+                                {
+                                    toggle: this.toggleTask.bind(this),
+                                    delete: this.deleteTask.bind(this),
+                                    add: this.addTask.bind(this)
+                                }
                             }
-                        }
-                        cardCallbacks={
-                            {
-                                addCard: this.addCard.bind(this),
-                                updateCard: this.updateCard.bind(this),
-                                updateStatus: this.updateCardStatus,
-                                updatePosition: this.updateCardPosition,
-                                persistCardDrag: this.persistCardDrag.bind(this)
-                            }
-                        }        
-                />
+                    {...this.props} />
             )} />
         );
     }
 }
 
-export default KanbanBoardContainer;
+const mapStateToProps = (state) => ({
+    cards: state.cards,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    cardActions: bindActionCreators(CardActionCreators, dispatch),
+});
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(KanbanBoardContainer));
