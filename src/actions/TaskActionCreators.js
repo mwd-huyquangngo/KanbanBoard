@@ -21,6 +21,16 @@ let TaskActionCreators = {
                 (error) => dispatch({type: constants.DELETE_TASK_ERROR, cardId: cardId, task: task})
             );
         }
+    },
+
+    toggleTask(cardId, task) {
+        return (dispatch) => {
+            dispatch({type: constants.TOGGLE_TASK, cardId: cardId, taskId: task.id});
+            KanbanAPI.toggleTask(cardId, task).then(
+                (response) => dispatch({type: constants.TOGGLE_TASK_SUCCESS}),
+                (error) => dispatch({type: constants.TOGGLE_TASK_ERROR, cardId: cardId, taskId: task.id})
+            );
+        }
     }
 
 };

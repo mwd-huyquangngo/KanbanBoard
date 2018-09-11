@@ -27,8 +27,8 @@ export default {
     DELETE_TASK_SUCCESS: 'delete task success',
     DELETE_TASK_ERROR: 'delete task error',
 
-    // TOGGLE_TASK: 'toggle task',
-    // TOGGLE_TASK_SUCCESS: 'toggle task success',
-    // TOGGLE_TASK_ERROR: 'toggle task error',
+    TOGGLE_TASK: 'toggle task',
+    TOGGLE_TASK_SUCCESS: 'toggle task success',
+    TOGGLE_TASK_ERROR: 'toggle task error',
 
 }

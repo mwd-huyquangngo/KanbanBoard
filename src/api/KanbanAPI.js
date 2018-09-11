@@ -54,13 +54,13 @@ let KanbanAPI = {
         });
     },
 
-    // toggleTask(cardId, task) {
-    //     fetch(`${API_URL}/cards/${cardId}/tasks/${task.id}`, {
-    //         method: 'put',
-    //         headers: API_HEADERS,
-    //         body: JSON.stringify({done:!task.done})
-    //     });
-    // }
+    toggleTask(cardId, task) {
+        return fetch(`${API_URL}/cards/${cardId}/tasks/${task.id}`, {
+            method: 'put',
+            headers: API_HEADERS,
+            body: JSON.stringify({done:!task.done})
+        });
+    }
 };
 
 export default KanbanAPI;

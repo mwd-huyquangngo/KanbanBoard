@@ -117,6 +117,30 @@ const cards = (state = [], action) => {
                     }
                 }
             });
+        case constants.TOGGLE_TASK:
+            cardIndex = getCardIndex(state, action.cardId);
+            taskIndex = getTaskIndex(state, cardIndex, action.taskId);
+            return update(state, {
+                [cardIndex]: {
+                    tasks: {
+                        [taskIndex] : {
+                            done: { $apply: (done) => !done }
+                        }
+                    }
+                }
+            });
+        case constants.TOGGLE_TASK_ERROR:
+            cardIndex = getCardIndex(state, action.cardId);
+            taskIndex = getTaskIndex(state, cardIndex, action.taskId);
+            return update(state, {
+                [cardIndex]: {
+                    tasks: {
+                        [taskIndex] : {
+                            done: { $apply: (done) => !done }
+                        }
+                    }
+                }
+            });
         default:
             return state;
     }
