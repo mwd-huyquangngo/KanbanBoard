@@ -19,19 +19,19 @@ class KanbanBoard extends Component {
                 <Link to='/new' className="float-button">+</Link>
                 <ListCard id='todo' title='To Do' 
                     filterCards={this.props.cards.filter((card) => {return card.status === "todo"})}
-                    taskCallbacks={this.props.taskCallbacks}
+                    taskActions={this.props.taskActions}
                     cardActions={this.props.cardActions}
                     cards={this.props.cards}
                 />
                 <ListCard id='in-progress' title='In Progress' 
                     filterCards={this.props.cards.filter((card) => {return card.status === "in-progress"})}
-                    taskCallbacks={this.props.taskCallbacks}
+                    taskActions={this.props.taskActions}
                     cardActions={this.props.cardActions}
                     cards={this.props.cards}
                 />
                 <ListCard id='done' title='Done' 
                     filterCards={this.props.cards.filter((card) => {return card.status === "done"})}
-                    taskCallbacks={this.props.taskCallbacks}
+                    taskActions={this.props.taskActions}
                     cardActions={this.props.cardActions}
                     cards={this.props.cards}
                 />
@@ -52,7 +52,7 @@ class KanbanBoard extends Component {
 KanbanBoard.propTypes = {
     cards: PropTypes.arrayOf(PropTypes.object),
     filterCards: PropTypes.arrayOf(PropTypes.object),
-    taskCallbacks: PropTypes.object,
+    taskActions: PropTypes.object,
 };
 
 export default DragDropContext(HTML5Backend)(KanbanBoard);

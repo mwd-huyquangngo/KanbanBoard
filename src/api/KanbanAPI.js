@@ -38,14 +38,14 @@ let KanbanAPI = {
         });
     },
 
-    // addTask(cardId, task) {
-    //     return fetch(`${API_URL}/cards/${cardId}/tasks`, {
-    //         method: 'post',
-    //         headers: API_HEADERS,
-    //         body: JSON.stringify(task)
-    //     })
-    //     .then((response) => response.json());
-    // },
+    addTask(cardId, task) {
+        return fetch(`${API_URL}/cards/${cardId}/tasks`, {
+            method: 'post',
+            headers: API_HEADERS,
+            body: JSON.stringify(task)
+        })
+        .then((response) => response.json());
+    },
 
     // deleteTask(cardId, taskId) {
     //     return fetch(`${API_URL}/cards/${cardId}/tasks/${taskId}`, {

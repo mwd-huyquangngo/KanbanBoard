@@ -24,7 +24,7 @@ class ListCard extends Component {
         let filterCards = this.props.filterCards.map((card) => {
             return (
                 <Card key={card.id}
-                    taskCallbacks={this.props.taskCallbacks}
+                    taskActions={this.props.taskActions}
                     cardActions={this.props.cardActions}
                     cards={this.props.cards}
                     {...card}
@@ -45,7 +45,7 @@ ListCard.propTypes = {
     title: PropTypes.string.isRequired,
     cards: PropTypes.arrayOf(PropTypes.object),
     filterCards: PropTypes.arrayOf(PropTypes.object),
-    taskCallbacks: PropTypes.object,
+    taskActions: PropTypes.object,
     cardActions: PropTypes.object,
     connectDropTarget: PropTypes.func.isRequired
 };

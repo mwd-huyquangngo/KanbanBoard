@@ -3,6 +3,8 @@ import update from 'react-addons-update';
 
 const cards = (state = [], action) => {
     let cardIndex;
+    let taskIndex;
+
     switch (action.type) {
         case constants.FETCH_CARDS_SUCCESS:
             return action.cards;
@@ -61,6 +63,37 @@ const cards = (state = [], action) => {
                     color: {$set: action.card.color}
                 }
             });
+        case constants.CREATE_TASK:
+            cardIndex = getCardIndex(state, action.cardId);
+            return update(state, {
+                [cardIndex]: {
+                    tasks: {
+                        $push: [action.task]
+                    }
+                }    
+            });
+        case constants.CREATE_TASK_SUCCESS:
+            cardIndex = getCardIndex(state, action.cardId);
+            taskIndex = getTaskIndex(state, cardIndex, action.oldTaskId);
+            return update(state, {
+                [cardIndex] : {
+                    tasks: {
+                        [taskIndex] : {
+                            id: {$set: action.newTask.id}
+                        }
+                    }
+                }
+            });
+        case constants.CREATE_CARD_ERROR:
+            cardIndex = getCardIndex(state, action.cardId);
+            taskIndex = getTaskIndex(state, cardIndex, action.taskId);
+            return update(state, {
+                [cardIndex] : {
+                    tasks : {
+                        $splice: [[taskIndex, 1]]
+                    }
+                }
+            });
         default:
             return state;
     }
@@ -72,6 +105,10 @@ function getCard(state, id) {
 
 function getCardIndex(state, id) {
     return state.findIndex((card) => card.id === id);
+}
+
+function getTaskIndex(state, cardIndex, taskId) {
+    return state[cardIndex].tasks.findIndex((task) => task.id === taskId);
 }
 
 function getCardColor(listId) {

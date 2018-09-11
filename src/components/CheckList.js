@@ -5,7 +5,13 @@ import PropTypes from 'prop-types';
 class CheckList extends Component {
     checkInputKeyPress(evt) {
         if(evt.key === 'Enter') {
-            this.props.taskCallbacks.add(this.props.cardId, evt.target.value);
+            //create a new task with taskName and temporatory ID
+            let newTask = {
+                id: Date.now(),
+                name: evt.target.value,
+                done: false
+            };
+            this.props.taskActions.addTask(this.props.cardId, newTask);
             evt.target.value = '';
         }
     }
@@ -18,7 +24,7 @@ class CheckList extends Component {
                       taskId={task.id}
                       name={task.name}
                       isChecked={task.done}
-                      taskCallbacks={this.props.taskCallbacks}
+                      taskActions={this.props.taskActions}
                       taskIndex={taskIndex}
                 />
             );
@@ -40,7 +46,7 @@ class CheckList extends Component {
 CheckList.propTypes = {
     cardId: PropTypes.number,
     tasks: PropTypes.arrayOf(PropTypes.object),
-    taskCallbacks: PropTypes.object,
+    taskActions: PropTypes.object,
 };
 
 export default CheckList;

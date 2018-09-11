@@ -5,6 +5,7 @@ import update from 'react-addons-update';
 import { throttle } from '../utils/utils';
 import { Route, withRouter } from "react-router-dom";
 import CardActionCreators from '../actions/CardActionCreators';
+import TaskActionCreators from '../actions/TaskActionCreators';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -22,63 +23,6 @@ class KanbanBoardContainer extends Component {
 
     componentDidMount() {
         this.props.cardActions.fetchCards();
-    }
-
-    addTask(cardId, taskName) {
-        // Keep a reference to the original state prior to the mutations
-        // in case you need to revert the optimistic changes in the UI
-        let prevState = this.state;
-
-        //find the index of the card
-        let cardIndex = this.state.cards.findIndex((card) => card.id === cardId);
-
-        //create a new task with taskName and temporatory ID
-        let newTask = {
-            id: Date.now(),
-            name: taskName,
-            done: false
-        };
-
-        //create a new object and push the new task into the array of tasks
-        let nextState = update(this.state.cards, {
-            [cardIndex]: {
-                tasks: {
-                    $push: [newTask]
-                }
-            }
-        });
-
-        //set the component state to the mutated object
-        this.setState({cards:nextState});
-
-        //call API to add task to server
-        fetch(`${API_URL}/cards/${cardId}/tasks`, {
-            method: 'post',
-            headers: API_HEADERS,
-            body: JSON.stringify(newTask)
-        })
-        //after adding new task to server by temporary ID
-        //we need to get the real ID on server to sync with taskID in state of React object
-            .then((response) => {
-                if (response.ok) {
-                    return response.json();
-                }
-                else {
-                    //throw an error if server response failed
-                    //we can revert back the optimistic changes made to the UI
-                    throw new Error("Server response FAILED for ADDDING task.");
-                }
-            })
-            .then((responseData) => {
-                //when the server returns the definitive ID
-                //used for the new task on the server, update it on React
-                newTask.id = responseData.id;
-                this.setState({cards:nextState});
-            })
-            .catch((error) => {
-                console.error("ADD task error:",error);
-                this.setState(prevState);
-            });
     }
 
     deleteTask(cardId, taskId, taskIndex) {
@@ -168,14 +112,7 @@ class KanbanBoardContainer extends Component {
     render() {
         return(   
             <Route render={() => ( 
-                <KanbanBoard taskCallbacks={
-                                {
-                                    toggle: this.toggleTask.bind(this),
-                                    delete: this.deleteTask.bind(this),
-                                    add: this.addTask.bind(this)
-                                }
-                            }
-                    {...this.props} />
+                <KanbanBoard {...this.props} />
             )} />
         );
     }
@@ -187,6 +124,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     cardActions: bindActionCreators(CardActionCreators, dispatch),
+    taskActions: bindActionCreators(TaskActionCreators, dispatch),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(KanbanBoardContainer));

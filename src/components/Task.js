@@ -5,13 +5,13 @@ class Task extends Component {
     render() {
         return (
             <li key={this.props.taskId} className="checklist__task">
-                <input type="checkbox" defaultChecked={this.props.isChecked} onChange={
-                    this.props.taskCallbacks.toggle.bind(null, this.props.cardId, this.props.taskId, this.props.taskIndex)
-                } />
+                <input type="checkbox" defaultChecked={this.props.isChecked} 
+                // onChange={this.props.taskActions.toggle.bind(null, this.props.cardId, this.props.taskId, this.props.taskIndex)} 
+                />
                 {this.props.name}{' '}
-                <a href="#" className="checklist__task--remove" onClick={
-                    this.props.taskCallbacks.delete.bind(null, this.props.cardId, this.props.taskId, this.props.taskIndex)
-                } />
+                <a href="#" className="checklist__task--remove" 
+                    // onClick={this.props.taskActions.delete.bind(null, this.props.cardId, this.props.taskId, this.props.taskIndex)} 
+                />
             </li>
         );
     }

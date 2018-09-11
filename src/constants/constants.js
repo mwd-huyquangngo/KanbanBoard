@@ -19,9 +19,9 @@ export default {
     PERSIST_CARD_DRAG_SUCCESS: 'persist card drag success',
     PERSIST_CARD_DRAG_ERROR: 'persist card drag error',
 
-    // CREATE_TASK: 'create task',
-    // CREATE_TASK_SUCCESS: 'create task success',
-    // CREATE_TASK_ERROR: 'create task error',
+    CREATE_TASK: 'create task',
+    CREATE_TASK_SUCCESS: 'create task success',
+    CREATE_TASK_ERROR: 'create task error',
 
     // DELETE_TASK: 'delete task',
     // DELETE_TASK_SUCCESS: 'delete task success',
