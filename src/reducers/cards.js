@@ -94,6 +94,29 @@ const cards = (state = [], action) => {
                     }
                 }
             });
+        case constants.DELETE_TASK:
+            cardIndex = getCardIndex(state, action.cardId);
+            taskIndex = getTaskIndex(state, cardIndex, action.taskId);
+            return update(state, {
+                [cardIndex] : {
+                    tasks : {
+                        $splice: [[taskIndex, 1]]
+                    }
+                }
+            });
+        case constants.DELETE_TASK_ERROR:
+            cardIndex = getCardIndex(state, action.cardId);
+            taskIndex = getTaskIndex(state, cardIndex, action.task.id);
+
+            return update(state, {
+                [cardIndex] : {
+                    tasks: {
+                        [taskIndex] : {
+                            $splice: [[taskIndex, 0, action.task]]
+                        }
+                    }
+                }
+            });
         default:
             return state;
     }

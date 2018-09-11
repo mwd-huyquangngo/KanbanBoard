@@ -13,6 +13,16 @@ let TaskActionCreators = {
         }
     },
 
+    deleteTask(cardId, task) {
+        return (dispatch) => {
+            dispatch({type: constants.DELETE_TASK, cardId: cardId, taskId: task.id});
+            KanbanAPI.deleteTask(cardId, task.id).then(
+                (response) => dispatch({type: constants.DELETE_TASK_SUCCESS}),
+                (error) => dispatch({type: constants.DELETE_TASK_ERROR, cardId: cardId, task: task})
+            );
+        }
+    }
+
 };
 
 export default TaskActionCreators;

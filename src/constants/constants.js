@@ -23,9 +23,9 @@ export default {
     CREATE_TASK_SUCCESS: 'create task success',
     CREATE_TASK_ERROR: 'create task error',
 
-    // DELETE_TASK: 'delete task',
-    // DELETE_TASK_SUCCESS: 'delete task success',
-    // DELETE_TASK_ERROR: 'delete task error',
+    DELETE_TASK: 'delete task',
+    DELETE_TASK_SUCCESS: 'delete task success',
+    DELETE_TASK_ERROR: 'delete task error',
 
     // TOGGLE_TASK: 'toggle task',
     // TOGGLE_TASK_SUCCESS: 'toggle task success',

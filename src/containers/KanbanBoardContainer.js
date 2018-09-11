@@ -25,42 +25,6 @@ class KanbanBoardContainer extends Component {
         this.props.cardActions.fetchCards();
     }
 
-    deleteTask(cardId, taskId, taskIndex) {
-        // Keep a reference to the original state prior to the mutations
-        // in case you need to revert the optimistic changes in the UI
-        let prevState = this.state;
-
-        //find the index of the card
-        let cardIndex = this.state.cards.findIndex((card) => card.id === cardId);
-
-        //create a new object without the task
-        let nextState = update(this.state.cards, {
-            [cardIndex]: {
-                tasks: {$splice: [[taskIndex,1]]}
-            }
-        });
-
-        //set the component state to the mutated object
-        this.setState({cards:nextState});
-
-        //call the API to remove the task on the server
-        fetch(`${API_URL}/cards/${cardId}/tasks/${taskId}`, {
-            method: 'delete',
-            headers: API_HEADERS
-        })
-        .then((response) => {
-            if(!response.ok) {
-                //throw an error if server response failed
-                //we can revert back the optimistic changes made to the UI
-                throw new Error("Server response FAILED for DELETING task.");
-            }
-        })
-        .catch((error) => {
-            console.error("DELETE task error:",error);
-            this.setState(prevState);
-        });
-    }
-
     toggleTask(cardId, taskId, taskIndex) {
         // Keep a reference to the original state prior to the mutations
         // in case you need to revert the optimistic changes in the UI

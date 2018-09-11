@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 class Task extends Component {
     render() {
         return (
-            <li key={this.props.taskId} className="checklist__task">
-                <input type="checkbox" defaultChecked={this.props.isChecked} 
+            <li key={this.props.task.taskId} className="checklist__task">
+                <input type="checkbox" defaultChecked={this.props.task.isChecked} 
                 // onChange={this.props.taskActions.toggle.bind(null, this.props.cardId, this.props.taskId, this.props.taskIndex)} 
                 />
-                {this.props.name}{' '}
+                {this.props.task.name}{' '}
                 <a href="#" className="checklist__task--remove" 
-                    // onClick={this.props.taskActions.delete.bind(null, this.props.cardId, this.props.taskId, this.props.taskIndex)} 
+                    onClick={this.props.taskActions.deleteTask.bind(null, this.props.cardId, this.props.task)} 
                 />
             </li>
         );
@@ -19,9 +19,7 @@ class Task extends Component {
 
 Task.propTypes = {
     cardId: PropTypes.number,
-    taskId: PropTypes.number,
-    name: PropTypes.string.isRequired,
-    isChecked: PropTypes.bool.isRequired
+    task: PropTypes.object.isRequired,
 };
 
 export default Task;

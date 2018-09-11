@@ -47,12 +47,12 @@ let KanbanAPI = {
         .then((response) => response.json());
     },
 
-    // deleteTask(cardId, taskId) {
-    //     return fetch(`${API_URL}/cards/${cardId}/tasks/${taskId}`, {
-    //         method: 'delete',
-    //         headers: API_HEADERS
-    //     });
-    // }, 
+    deleteTask(cardId, taskId) {
+        return fetch(`${API_URL}/cards/${cardId}/tasks/${taskId}`, {
+            method: 'delete',
+            headers: API_HEADERS
+        });
+    },
 
     // toggleTask(cardId, task) {
     //     fetch(`${API_URL}/cards/${cardId}/tasks/${task.id}`, {

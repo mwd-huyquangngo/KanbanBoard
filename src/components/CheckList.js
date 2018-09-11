@@ -17,15 +17,12 @@ class CheckList extends Component {
     }
     
     render() {
-        let taskList  = this.props.tasks.map((task, taskIndex) => {
+        let taskList  = this.props.tasks.map((task) => {
             return (
                 <Task key={task.id}
                       cardId={this.props.cardId}
-                      taskId={task.id}
-                      name={task.name}
-                      isChecked={task.done}
+                      task={task}
                       taskActions={this.props.taskActions}
-                      taskIndex={taskIndex}
                 />
             );
         });
