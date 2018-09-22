@@ -6,6 +6,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { DragSource, DropTarget } from 'react-dnd';
 import constants from '../constants/constants';
 import { Link } from "react-router-dom";
+import shallowCompare from "react-addons-shallow-compare";
 
 let titlePropType = (props, propName, componentName) => {
     if (props[propName]) {
@@ -64,6 +65,9 @@ class Card extends Component {
         this.setState({showDetails: !this.state.showDetails});
     }
     
+    shouldComponentUpdate(nextProps, nextState) {
+        return shallowCompare(this, nextProps, nextState);
+    }
     render() {
         const { connectDragSource, connectDropTarget } = this.props;
         

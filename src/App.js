@@ -4,6 +4,7 @@ import KanbanBoardContainer from './containers/KanbanBoardContainer';
 import { HashRouter } from "react-router-dom";
 import { Provider } from 'react-redux';
 import CardStore from './store/CardStore';
+// import Perf from 'react-addons-perf';
 /*
 let cardsList = [
     {
@@ -50,6 +51,7 @@ let cardsList = [
 */
 
 //ReactDOM.render(<KanbanBoardContainer/>, document.getElementById('root'));
+// Perf.start();
 
 ReactDOM.render((
     <Provider store={CardStore}>
@@ -58,3 +60,9 @@ ReactDOM.render((
         </HashRouter>
     </Provider>
 ), document.getElementById('root'));
+
+// setTimeout(()=>{
+//     Perf.stop();
+//     Perf.printWasted();
+// }, 2000);
+   
